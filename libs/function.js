@@ -9,9 +9,7 @@ const { cwd } = require('process');
 
 exports.verify = (callback) => {
     if (existsSync(join(cwd(), '.cdep', 'keys/.pass'))) {
-        if (this.validity()) {
-            callback()
-        }
+        callback()
     }
     else
         logError("cdep configuration doesn't exist");
@@ -50,11 +48,13 @@ exports.dcryptG = (value, folder) => {
     }
 }
 
-exports.readCryptJson = (source, target, apiname) => {
-    let dataKeys = join(apiname ? join(cwd(), apiname) : cwd(), ".cdep", "keys")
+exports.readCryptJson = (source, target) => {
+    let dataKeys = join(cwd(), ".cdep", "keys")
     let key = fs.readFileSync(join(dataKeys, ".pass")).toString()
+
     let dataCrypt = fs.readFileSync(source).toString()
     let dataDcrypt = this.dcryptG(dataCrypt, dataKeys)
+
     let dataJWT = jwt.verify(dataDcrypt, key)
 
     if (target !== undefined) {
@@ -64,8 +64,8 @@ exports.readCryptJson = (source, target, apiname) => {
     }
 }
 
-exports.writeCryptJson = (data, file, apiname) => {
-    let dataKeys = join(apiname ? join(cwd(), apiname) : cwd(), ".cdep", "keys")
+exports.writeCryptJson = (data, file) => {
+    let dataKeys = join(cwd(), ".cdep", "keys")
     let key = fs.readFileSync(join(dataKeys, ".pass")).toString()
     let dataJWT = jwt.sign(data, key)
     fs.writeFileSync(file, this.cryptG(dataJWT, dataKeys))

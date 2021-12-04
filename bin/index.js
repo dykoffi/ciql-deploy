@@ -3,11 +3,20 @@ const { Command } = require('commander')
 const program = new Command();
 const { prompt } = require('enquirer')
 const { existsSync } = require('fs')
+const ciqlJSON = require("ciql-json")
+const func = require('../libs/function');
+
+const crypto = require('crypto');
+const { join } = require('path');
+const { logError, logSuccess } = require('../libs/utils');
+
 
 //Server cmd functions
 const server_add = require('./server/add');
+const server_ls = require('./server/ls');
+
 const init = require('./init');
-const { logError, logSuccess } = require('../libs/utils');
+
 
 
 const initCmd = program
@@ -37,17 +46,70 @@ initCmd
   })
 
 server
-  .command('add <server>')
+  .command('add <server_name>')
   .description('Add new server configuration')
-  .action((server) => {
+  .action((server_name) => {
+    func.verify(async () => {
+      prompt([
+        {
+          type: "input",
+          name: "host",
+          message: "Host",
+        },
+        {
+          type: "input",
+          name: "port",
+          message: "Port",
+          initial: 22
+        },
+        {
+          type: "input",
+          name: "user",
+          message: "User",
+        },
+        {
+          type: "invisible",
+          name: "password",
+          message: "Password",
+        }
+      ])
+        .then(({ host, port, user, password }) => {
+          server_add(server_name, host, port, user, password)
+            .then(mes => {
+              logSuccess(mes)
 
+              let identifiant = crypto.randomBytes(32).toString('base64')
+              identifiant = "sv-" + identifiant
+
+              let dataPath = join(process.cwd(), ".cdep", "data", ".servers")
+
+              let data = ciqlJSON
+                .create(func.readCryptJson(dataPath))
+                .set(server_name, { id: identifiant, servername: server_name, host, port, user, pass: password })
+                .getData()
+
+              func.writeCryptJson(data, dataPath)
+              logSuccess("Configuration saved")
+            })
+            .catch(err => { logError(err); process.exit(1) })
+            .finally(() => { setTimeout(() => { process.exit(0) }, 1000) })
+        })
+        .catch(reason => { logError("Broken") })
+
+    })
   })
 
-server
-  .command('ls')
-  .description('List all servers')
-  .action(() => {
 
+server
+  .command("ls")
+  .description("show all connected servers information")
+  .action(() => {
+    func.verify(() => {
+      server_ls()
+        .then()
+        .catch(err => { logError(err); process.exit(1) })
+        .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
+    })
   })
 
 server

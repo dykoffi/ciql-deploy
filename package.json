@@ -32,8 +32,12 @@
   "type": "commonjs",
   "homepage": "https://github.com/dykoffi/ciql-deploy#readme",
   "dependencies": {
+    "ciql-json": "^1.9.6",
     "commander": "^7.2.0",
     "enquirer": "^2.3.6",
-    "jsonwebtoken": "^8.5.1"
+    "generate-password": "^1.7.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-ssh": "^12.0.2",
+    "tty-table": "^4.1.5"
   }
 }
