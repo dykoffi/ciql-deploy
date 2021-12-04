@@ -33,7 +33,7 @@ function list() {
       servers.forEach(d => {
         if (d !== "iat") {
           rows.push([
-            d,
+            infos[d]["servername"],
             infos[d]["host"],
             infos[d]["port"],
             infos[d]["user"],
