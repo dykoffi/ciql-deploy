@@ -13,6 +13,6 @@ exports.writePass = async () => {
   fs.writeFileSync(join(CONFIG_PATH, 'keys', '.passiv.key'), passiv, (err) => { err && logError(err.message) })
 
   writeCryptJson({}, join(CONFIG_PATH, 'data', '.servers'))
-  writeCryptJson({}, join(CONFIG_PATH, 'data', '.process'))
+  writeCryptJson({}, join(CONFIG_PATH, 'data', '.jobs'))
 
 }

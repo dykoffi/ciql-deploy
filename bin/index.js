@@ -10,7 +10,7 @@ const { cwd } = require('process')
 
 const crypto = require('crypto');
 const { join } = require('path');
-const { logError, logSuccess } = require('../libs/utils');
+const { logError, logSuccess, logInfo } = require('../libs/utils');
 
 
 //Server cmd functions
@@ -22,15 +22,15 @@ const server_rm = require('./server/rm');
 
 const init = require('./init');
 
-
+const job_ls = require('./jobs/ls');
 
 const initCmd = program
   .command('init')
   .description('Initialize config files')
 
-const processCmd = program
-  .command('process')
-  .description('Manage configuration')
+const job = program
+  .command('job')
+  .description('Manage job configuration')
 
 const server = program
   .command('server')
@@ -196,18 +196,45 @@ server
   .action((server_name) => {
     func.verify(() => {
       server_rm(server_name)
-      .then()
-      .catch(err => { logError(err); process.exit(1) })
-      .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
+        .then()
+        .catch(err => { logError(err); process.exit(1) })
+        .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
     })
   })
 
 server
-  .command('copy <server1> <server2>')
+  .command('copy <server1_name> <server2_name>')
   .description('Copy server config to another server')
-  .action((server) => {
+  .action((server1_name, server2_name) => {
     func.verify(() => {
+      const configs = ciqlJSON.create(func.readCryptJson(join(cwd(), ".cdep/data/.servers"))).getKeys()
+      if (!configs.includes(server1_name)) {
+        logError(server1_name + " config not found")
+        process.exit(1)
+      }
 
+      try {
+
+        const { host, port, user, pass } = ciqlJSON
+          .create(func.readCryptJson(join(cwd(), ".cdep/data/.servers")))
+          .getData()[server1_name]
+
+        let dataPath = join(cwd(), ".cdep", "data", ".servers")
+
+        let identifiant = crypto.randomBytes(32).toString('base64')
+        identifiant = "sv-" + identifiant
+
+        let data = ciqlJSON
+          .create(func.readCryptJson(dataPath))
+          .set(server2_name, { id: identifiant, servername: server2_name, host, port, user, pass })
+          .getData()
+
+        func.writeCryptJson(data, dataPath)
+        logSuccess("Configuration saved")
+
+      } catch (error) {
+        logError(error.message);
+      }
     })
   })
 
@@ -225,5 +252,96 @@ server
 
   })
 
+
+
+job
+  .command('add <job_name>')
+  .description('add job')
+  .action((job_name) => {
+    func.verify(async () => {
+
+      try {
+        console.log();
+        logInfo("on Local\n")
+        let { prebuild, build, artefact, postdeploy } = await prompt([
+          {
+            type: "input",
+            name: "prebuild",
+            message: "Prebuild script",
+          },
+          {
+            type: "input",
+            name: "build",
+            message: "Build script",
+          },
+          {
+            type: "input",
+            name: "artefact",
+            message: "Artefacts",
+          },
+          {
+            type: "input",
+            name: "postdeploy",
+            message: "Post deploy",
+          },
+        ])
+
+        console.log();
+        logInfo("Server information\n")
+
+        const serversConfig = ciqlJSON
+          .create(func.readCryptJson(join(process.cwd(), '.cdep', 'data', '.servers')))
+          .remove('iat')
+          .getKeys()
+
+        let { serverName, targetPath, cmd } = await prompt([
+          {
+            type: "select",
+            name: "serverName",
+            message: "Chose server you want to connected",
+            choices: serversConfig
+          },
+          {
+            type: "input",
+            name: "targetPath",
+            message: "Target path",
+          },
+          {
+            type: "input",
+            name: "cmd",
+            message: "Cmd",
+          }
+        ])
+
+        let identifiant = crypto.randomBytes(32).toString('base64')
+        identifiant = "sv-" + identifiant
+
+        let dataPath = join(cwd(), ".cdep", "data", ".jobs")
+
+        let data = ciqlJSON
+          .create(func.readCryptJson(dataPath))
+          .set(job_name, { id: identifiant, jobName: job_name, prebuild, build, postdeploy, artefact, serverName, serverTargetPath: targetPath, serverCmd: cmd })
+          .getData()
+
+        func.writeCryptJson(data, dataPath)
+        logSuccess("Job saved")
+
+      } catch (error) {
+        logError(error.message ? error.message : "broken")
+      }
+    })
+  })
+
+  job
+  .command("ls")
+  .description("show all jobs information")
+  .action(() => {
+    func.verify(() => {
+      job_ls()
+        .then()
+        .catch(err => { logError(err); process.exit(1) })
+        .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
+    })
+  })
 
 program.parse(process.args)

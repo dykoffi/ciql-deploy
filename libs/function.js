@@ -70,3 +70,8 @@ exports.writeCryptJson = (data, file) => {
     let dataJWT = jwt.sign(data, key)
     fs.writeFileSync(file, this.cryptG(dataJWT, dataKeys))
 }
+
+
+exports.countProcesses = (server) => {
+
+}
