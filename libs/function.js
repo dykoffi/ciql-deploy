@@ -8,13 +8,13 @@ const { cwd } = require('process');
 
 
 exports.verify = (callback) => {
-    if (existsSync(join(cwd(), '.ciql', 'keys/.pass'))) {
+    if (existsSync(join(cwd(), '.cdep', 'keys/.pass'))) {
         if (this.validity()) {
             callback()
         }
     }
     else
-        logError("This is not ciql project root");
+        logError("cdep configuration doesn't exist");
 }
 
 exports.cryptG = (value, folder) => {
@@ -51,7 +51,7 @@ exports.dcryptG = (value, folder) => {
 }
 
 exports.readCryptJson = (source, target, apiname) => {
-    let dataKeys = join(apiname ? join(cwd(), apiname) : cwd(), ".ciql", "keys")
+    let dataKeys = join(apiname ? join(cwd(), apiname) : cwd(), ".cdep", "keys")
     let key = fs.readFileSync(join(dataKeys, ".pass")).toString()
     let dataCrypt = fs.readFileSync(source).toString()
     let dataDcrypt = this.dcryptG(dataCrypt, dataKeys)
@@ -65,7 +65,7 @@ exports.readCryptJson = (source, target, apiname) => {
 }
 
 exports.writeCryptJson = (data, file, apiname) => {
-    let dataKeys = join(apiname ? join(cwd(), apiname) : cwd(), ".ciql", "keys")
+    let dataKeys = join(apiname ? join(cwd(), apiname) : cwd(), ".cdep", "keys")
     let key = fs.readFileSync(join(dataKeys, ".pass")).toString()
     let dataJWT = jwt.sign(data, key)
     fs.writeFileSync(file, this.cryptG(dataJWT, dataKeys))

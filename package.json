@@ -4,7 +4,7 @@
   "description": "tool to automate deployment",
   "main": "./bin/index.js",
   "bin": {
-    "cde": "./bin/index.js"
+    "cdep": "./bin/index.js"
   },
   "scripts": {
     "test": "jest",
@@ -29,5 +29,11 @@
     "jest": "^27.3.1",
     "jest-junit": "^13.0.0"
   },
-  "homepage": "https://github.com/dykoffi/ciql-deploy#readme"
+  "type": "commonjs",
+  "homepage": "https://github.com/dykoffi/ciql-deploy#readme",
+  "dependencies": {
+    "commander": "^7.2.0",
+    "enquirer": "^2.3.6",
+    "jsonwebtoken": "^8.5.1"
+  }
 }

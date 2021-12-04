@@ -1,33 +1,14 @@
 
 const { existsSync, mkdirSync } = require('fs')
 const crypto = require('crypto');
-const generator = require('generate-password');
 const { resolve } = require('path');
 const chalk = require('chalk');
 
-const passphrase = generator.generate({
-  length: 255,
-  uppercase: false,
-  symbols: true,
-  numbers: true
-});
-
 const iv = crypto.randomBytes(16).toString('base64')
 const passiv = crypto.randomBytes(32).toString('base64')
+const pass = crypto.randomBytes(32).toString('base64')
 
-const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-  modulusLength: 2048,  // the length of your key in bits
-  publicKeyEncoding: {
-    type: 'spki',       // recommended to be 'spki' by the Node.js docs
-    format: 'pem'
-  },
-  privateKeyEncoding: {
-    type: 'pkcs8',      // recommended to be 'pkcs8' by the Node.js docs
-    format: 'pem',
-    cipher: 'aes-256-cbc',   // *optional*
-    passphrase: passphrase // *optional*
-  }
-});
+
 
 function createFolder(name) {
   if (!existsSync(resolve(name))) {
@@ -62,10 +43,9 @@ exports.logInfo = logInfo
 exports.logWarning = logWarning
 
 exports.algo = "aes-256-ctr"
+
 exports.createFolder = createFolder
-exports.privateKey = privateKey
-exports.publicKey = publicKey
-exports.passphrase = passphrase
 exports.iv = iv
 exports.passiv = passiv
+exports.pass = pass
 exports.crypt = crypt
