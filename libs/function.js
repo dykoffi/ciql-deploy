@@ -5,6 +5,7 @@ const fs = require("fs");
 const { join } = require('path');
 const jwt = require("jsonwebtoken")
 const { cwd } = require('process');
+const ciqlJSON = require("ciql-json")
 
 
 exports.verify = (callback) => {
@@ -74,4 +75,10 @@ exports.writeCryptJson = (data, file) => {
 
 exports.countProcesses = (server) => {
 
+}
+
+
+exports.existServer = (server) => {
+    const configs = ciqlJSON.create(this.readCryptJson(join(cwd(), ".cdep/data/.servers"))).getKeys()
+    return configs.includes(server)
 }

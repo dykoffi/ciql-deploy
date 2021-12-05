@@ -48,7 +48,7 @@ function list() {
           ])
         }
       });
-      console.log("\nServers configuration list");
+      console.log("\nJobs configuration list");
       console.log(table(header, rows, options).render());
 
       resolveOK("OK")

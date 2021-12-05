@@ -23,6 +23,8 @@ const server_rm = require('./server/rm');
 const init = require('./init');
 
 const job_ls = require('./jobs/ls');
+const job_clear = require('./jobs/clear');
+const job_rm = require('./jobs/rm');
 
 const initCmd = program
   .command('init')
@@ -54,6 +56,11 @@ server
   .command('add <server_name>')
   .description('Add new server configuration')
   .action((server_name) => {
+
+    if (func.existServer(server_name)) {
+      logError(server_name + " already exist")
+      process.exit(1)
+    }
     func.verify(async () => {
       prompt([
         {
@@ -332,7 +339,7 @@ job
     })
   })
 
-  job
+job
   .command("ls")
   .description("show all jobs information")
   .action(() => {
@@ -341,6 +348,68 @@ job
         .then()
         .catch(err => { logError(err); process.exit(1) })
         .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
+    })
+  })
+
+job
+  .command("rm <job_name>")
+  .description("Delete specify job")
+  .action((job_name) => {
+    func.verify(() => {
+      job_rm(job_name)
+        .then()
+        .catch(err => { logError(err); process.exit(1) })
+        .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
+    })
+  })
+
+job
+  .command('clear')
+  .description('Clean all servers data')
+  .action((server) => {
+    func.verify(() => {
+      job_clear()
+        .then(mes => { logSuccess("All server's config removed") })
+        .catch(err => { logError(err); process.exit(1) })
+        .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
+    })
+
+  })
+
+
+job
+  .command('copy <job1_name> <job2_name>')
+  .description('Copy job config to another job')
+  .action((job1_name, job2_name) => {
+    func.verify(() => {
+      const configs = ciqlJSON.create(func.readCryptJson(join(cwd(), ".cdep/data/.jobs"))).getKeys()
+      if (!configs.includes(job1_name)) {
+        logError(job1_name + " config not found")
+        process.exit(1)
+      }
+
+      try {
+
+        const { prebuild, build, postdeploy, artefact, serverName, serverTargetPath, serverCmd } = ciqlJSON
+          .create(func.readCryptJson(join(cwd(), ".cdep/data/.jobs")))
+          .getData()[job1_name]
+
+        let dataPath = join(cwd(), ".cdep", "data", ".jobs")
+
+        let identifiant = crypto.randomBytes(32).toString('base64')
+        identifiant = "sv-" + identifiant
+
+        let data = ciqlJSON
+          .create(func.readCryptJson(dataPath))
+          .set(job2_name, { id: identifiant, jobName: job2_name, prebuild, build, postdeploy, artefact, serverName, serverTargetPath, serverCmd })
+          .getData()
+
+        func.writeCryptJson(data, dataPath)
+        logSuccess("Configuration saved")
+
+      } catch (error) {
+        logError(error.message);
+      }
     })
   })
 

@@ -1,7 +1,7 @@
 const ciqlJSON = require("ciql-json")
 const { join } = require("path")
 const table = require("tty-table")
-const { readCryptJson } = require("../../libs/function")
+const { readCryptJson } = require("../../../ciql-deploy/libs/function")
 const { cwd } = require("process")
 
 
