@@ -82,3 +82,8 @@ exports.existServer = (server) => {
     const configs = ciqlJSON.create(this.readCryptJson(join(cwd(), ".cdep/data/.servers"))).getKeys()
     return configs.includes(server)
 }
+
+exports.existJob = (job) => {
+    const configs = ciqlJSON.create(this.readCryptJson(join(cwd(), ".cdep/data/.jobs"))).getKeys()
+    return configs.includes(job)
+}

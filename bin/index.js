@@ -58,7 +58,7 @@ server
   .action((server_name) => {
 
     if (func.existServer(server_name)) {
-      logError(server_name + " already exist")
+      logError(server_name + "server already exist")
       process.exit(1)
     }
     func.verify(async () => {
@@ -129,9 +129,9 @@ server
   .description('Edit server configuration')
   .action((server_name) => {
     func.verify(() => {
-      const configs = ciqlJSON.create(func.readCryptJson(join(cwd(), ".cdep/data/.servers"))).getKeys()
-      if (!configs.includes(server_name)) {
-        logError(server_name + " config not found")
+
+      if (!func.existServer(server_name)) {
+        logError(server_name, "server not found")
         process.exit(1)
       }
 
@@ -201,9 +201,13 @@ server
   .command('rm <server_name>')
   .description('Delete specify server')
   .action((server_name) => {
+    if (!func.existServer(server_name)) {
+      logError(server_name, "server not found")
+      process.exit(1)
+    }
     func.verify(() => {
       server_rm(server_name)
-        .then()
+        .then(() => { logSuccess("Delete", server_name, "successfully") })
         .catch(err => { logError(err); process.exit(1) })
         .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
     })
@@ -214,9 +218,13 @@ server
   .description('Copy server config to another server')
   .action((server1_name, server2_name) => {
     func.verify(() => {
-      const configs = ciqlJSON.create(func.readCryptJson(join(cwd(), ".cdep/data/.servers"))).getKeys()
-      if (!configs.includes(server1_name)) {
-        logError(server1_name + " config not found")
+      if (!func.existServer(server1_name)) {
+        logError(server1_name, "server not found")
+        process.exit(1)
+      }
+
+      if (func.existServer(server2_name)) {
+        logError(server2_name, "server already exist")
         process.exit(1)
       }
 
@@ -237,7 +245,7 @@ server
           .getData()
 
         func.writeCryptJson(data, dataPath)
-        logSuccess("Configuration saved")
+        logSuccess(server1_name, "Configuration copied to", server2_name, "successfully")
 
       } catch (error) {
         logError(error.message);
@@ -266,6 +274,11 @@ job
   .description('add job')
   .action((job_name) => {
     func.verify(async () => {
+
+      if (func.existJob(job_name)) {
+        logError(job_name, "job already exist")
+        process.exit(1)
+      }
 
       try {
         console.log();
@@ -331,7 +344,7 @@ job
           .getData()
 
         func.writeCryptJson(data, dataPath)
-        logSuccess("Job saved")
+        logSuccess("Job saved successfully")
 
       } catch (error) {
         logError(error.message ? error.message : "broken")
@@ -356,6 +369,12 @@ job
   .description("Delete specify job")
   .action((job_name) => {
     func.verify(() => {
+
+      if (!func.existJob(job_name)) {
+        logError(job_name, "job not found")
+        process.exit(1)
+      }
+
       job_rm(job_name)
         .then()
         .catch(err => { logError(err); process.exit(1) })
@@ -369,7 +388,7 @@ job
   .action((server) => {
     func.verify(() => {
       job_clear()
-        .then(mes => { logSuccess("All server's config removed") })
+        .then(mes => { logSuccess("All job's configuration removed successfully") })
         .catch(err => { logError(err); process.exit(1) })
         .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
     })
@@ -382,9 +401,14 @@ job
   .description('Copy job config to another job')
   .action((job1_name, job2_name) => {
     func.verify(() => {
-      const configs = ciqlJSON.create(func.readCryptJson(join(cwd(), ".cdep/data/.jobs"))).getKeys()
-      if (!configs.includes(job1_name)) {
-        logError(job1_name + " config not found")
+
+      if (!func.existJob(job1_name)) {
+        logError(job1_name, "job not found")
+        process.exit(1)
+      }
+
+      if (func.existJob(job2_name)) {
+        logError(job2_name, "job already exist")
         process.exit(1)
       }
 
@@ -405,7 +429,7 @@ job
           .getData()
 
         func.writeCryptJson(data, dataPath)
-        logSuccess("Configuration saved")
+        logSuccess(job1_name, "Configuration copied to", job2_name, "successfully")
 
       } catch (error) {
         logError(error.message);
