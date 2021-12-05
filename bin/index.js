@@ -205,6 +205,14 @@ server
       logError(server_name, "server not found")
       process.exit(1)
     }
+
+    let nbJob = func.countServerJobs(server_name)
+
+    if (nbJob > 0) {
+      logError("you can't delete server", server_name)
+      logError(nbJob, "job(s) depens on it")
+      process.exit(1)
+    }
     func.verify(() => {
       server_rm(server_name)
         .then(() => { logSuccess("Delete", server_name, "successfully") })

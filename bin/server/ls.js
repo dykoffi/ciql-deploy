@@ -1,7 +1,7 @@
 const ciqlJSON = require("ciql-json")
 const { join } = require("path")
 const table = require("tty-table")
-const { readCryptJson } = require("../../../ciql-deploy/libs/function")
+const { readCryptJson, countServerJobs } = require("../../../ciql-deploy/libs/function")
 const { cwd } = require("process")
 
 
@@ -10,10 +10,11 @@ function list() {
     try {
 
       const header = [
-        { value: "Config name", color: "red",  },
+        { value: "Server name", color: "red",  },
         { value: "Host" },
         { value: "Port" },
         { value: "User" },
+        { value: "jobs", align : "center" },
       ]
 
       const rows = []
@@ -37,6 +38,7 @@ function list() {
             infos[d]["host"],
             infos[d]["port"],
             infos[d]["user"],
+            countServerJobs(infos[d]["servername"])
           ])
         }
       });
