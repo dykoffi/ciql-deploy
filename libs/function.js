@@ -88,3 +88,18 @@ exports.existJob = (job) => {
     const jobs = ciqlJSON.create(this.readCryptJson(join(cwd(), ".cdep/data/.jobs"))).getKeys()
     return jobs.includes(job)
 }
+
+exports.updatedJobsServerName = (oldServerName, newServerName) => { 
+
+    const dataPath = join(cwd(), ".cdep/data/.jobs")
+    const jobNames = ciqlJSON.create(this.readCryptJson(dataPath)).getKeys()
+    const jobsData = ciqlJSON.create(this.readCryptJson(dataPath)).getData()
+
+    jobNames.forEach((job)=>{
+        if (jobsData[job]['serverName'] === oldServerName) {
+            jobsData[job]['serverName'] = newServerName
+        }
+    })
+
+    this.writeCryptJson(jobsData, dataPath)
+}

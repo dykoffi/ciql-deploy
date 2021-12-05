@@ -186,7 +186,12 @@ server
                 .getData()
 
               func.writeCryptJson(data, dataPath)
-              logSuccess("Configuration saved")
+
+              if (server_name !== servername) {
+                func.updatedJobsServerName(server_name, servername)
+              }
+
+              logSuccess("Server updated successfully")
             })
             .catch(err => { logError(err); process.exit(1) })
             .finally(() => { setTimeout(() => { process.exit(0) }, 1000) })
@@ -210,7 +215,7 @@ server
 
     if (nbJob > 0) {
       logError("you can't delete server", server_name)
-      logError(nbJob, "job(s) depens on it")
+      logInfo(nbJob, "job(s) depend on it")
       process.exit(1)
     }
     func.verify(() => {
