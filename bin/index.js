@@ -106,7 +106,7 @@ server
             .catch(err => { logError(err); process.exit(1) })
             .finally(() => { setTimeout(() => { process.exit(0) }, 1000) })
         })
-        .catch(reason => { logError("Broken") })
+        .catch((error) => { logError(error.message ? error.message : "broken") })
 
     })
   })
@@ -191,7 +191,7 @@ server
             .catch(err => { logError(err); process.exit(1) })
             .finally(() => { setTimeout(() => { process.exit(0) }, 1000) })
         })
-        .catch((err) => { logError(err.message) })
+        .catch((error) => { logError(error.message ? error.message : "broken") })
 
     })
 
