@@ -372,6 +372,103 @@ job
   })
 
 job
+  .command('edit <job_name>')
+  .description('Edit specify job')
+  .action((job_name) => {
+    func.verify(async () => {
+
+      if (!func.existJob(job_name)) {
+        logError(job_name, "job not found")
+        process.exit(1)
+      }
+
+      try {
+
+        const dataPath = join(cwd(), ".cdep", "data", ".jobs")
+        const job = ciqlJSON.create(func.readCryptJson(dataPath)).getData()[job_name]
+
+        console.log();
+        logInfo("on Local\n")
+        let { prebuild, build, artefact, postdeploy, jobname } = await prompt([
+          {
+            type: "input",
+            name: "jobname",
+            message: "Job name",
+            initial: job_name
+          },
+          {
+            type: "input",
+            name: "prebuild",
+            message: "Prebuild script",
+            initial: job.prebuild
+          },
+          {
+            type: "input",
+            name: "build",
+            message: "Build script",
+            initial: job.build
+          },
+          {
+            type: "input",
+            name: "artefact",
+            message: "Artefacts",
+            initial: job.artefact
+          },
+          {
+            type: "input",
+            name: "postdeploy",
+            message: "Post deploy",
+            initial: job.postdeploy
+          },
+        ])
+
+        console.log();
+        logInfo("Server information\n")
+
+        const serversConfig = ciqlJSON
+          .create(func.readCryptJson(join(process.cwd(), '.cdep', 'data', '.servers')))
+          .remove('iat')
+          .getKeys()
+
+        let { serverName, targetPath, cmd } = await prompt([
+          {
+            type: "select",
+            name: "serverName",
+            message: "Chose server you want to connected",
+            choices: serversConfig,
+            initial: job.serverName
+          },
+          {
+            type: "input",
+            name: "targetPath",
+            message: "Target path",
+            initial: job.serverTargetPath
+          },
+          {
+            type: "input",
+            name: "cmd",
+            message: "Cmd",
+            initial: job.serverCmd
+          }
+        ])
+
+        let data = ciqlJSON
+          .create(func.readCryptJson(dataPath))
+          .remove(job_name)
+          .set(jobname, { id: job.id, jobName: jobname, prebuild, build, postdeploy, artefact, serverName, serverTargetPath: targetPath, serverCmd: cmd })
+          .getData()
+
+        func.writeCryptJson(data, dataPath)
+        logSuccess("Job updated successfully")
+
+      } catch (error) {
+        logError(error.message ? error.message : "broken")
+      }
+    })
+  })
+
+
+job
   .command("ls")
   .description("show all jobs information")
   .action(() => {
