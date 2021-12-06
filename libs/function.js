@@ -78,6 +78,10 @@ exports.countServerJobs = (server) => {
     return jobs.filter(j => j.serverName === server).length || "0"
 }
 
+exports.countServers = () => {
+    const servers = ciqlJSON.create(this.readCryptJson(join(cwd(), ".cdep/data/.servers"))).remove("iat").getKeys()
+    return servers.length || "0"
+}
 
 exports.existServer = (server) => {
     const servers = ciqlJSON.create(this.readCryptJson(join(cwd(), ".cdep/data/.servers"))).getKeys()
@@ -88,6 +92,7 @@ exports.existJob = (job) => {
     const jobs = ciqlJSON.create(this.readCryptJson(join(cwd(), ".cdep/data/.jobs"))).getKeys()
     return jobs.includes(job)
 }
+
 
 exports.updatedJobsServerName = (oldServerName, newServerName) => { 
 

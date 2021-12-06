@@ -269,11 +269,11 @@ server
 
 server
   .command('clear')
-  .description('Clean all servers data')
-  .action((server) => {
+  .description('Clear all servers data')
+  .action(() => {
     func.verify(() => {
       server_clear()
-        .then(mes => { logSuccess("All server's config removed") })
+        .then(() => { })
         .catch(err => { logError(err); process.exit(1) })
         .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
     })
@@ -290,6 +290,12 @@ job
 
       if (func.existJob(job_name)) {
         logError(job_name, "job already exist")
+        process.exit(1)
+      }
+
+      if (func.countServers() === 0) {
+        logError("You can't add job before server")
+        logInfo("job depend on server")
         process.exit(1)
       }
 
