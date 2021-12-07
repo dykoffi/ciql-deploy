@@ -25,6 +25,7 @@ const init = require('./init');
 const job_ls = require('./jobs/ls');
 const job_clear = require('./jobs/clear');
 const job_rm = require('./jobs/rm');
+const job_run = require('./jobs/run');
 
 const initCmd = program
   .command('init')
@@ -289,7 +290,7 @@ job
     func.verify(async () => {
 
       if (func.existJob(job_name)) {
-        logError(job_name, "job already exist")
+        logError("job", job_name, "already exist")
         process.exit(1)
       }
 
@@ -378,7 +379,7 @@ job
     func.verify(async () => {
 
       if (!func.existJob(job_name)) {
-        logError(job_name, "job not found")
+        logError("job", job_name, "not found")
         process.exit(1)
       }
 
@@ -389,13 +390,21 @@ job
 
         console.log();
         logInfo("on Local\n")
-        let { prebuild, build, artefact, postdeploy, jobname } = await prompt([
+
+        let { jobname } = await prompt([
           {
             type: "input",
             name: "jobname",
             message: "Job name",
             initial: job_name
-          },
+          }])
+
+        if (func.existJob(jobname) && jobname !== job_name) {
+          logError("job", jobname, "already exist")
+          process.exit(1)
+        }
+
+        let { prebuild, build, artefact, postdeploy } = await prompt([
           {
             type: "input",
             name: "prebuild",
@@ -434,7 +443,7 @@ job
           {
             type: "select",
             name: "serverName",
-            message: "Chose server you want to connected",
+            message: "Chose server you want to connect",
             choices: serversConfig,
             initial: job.serverName
           },
@@ -487,7 +496,7 @@ job
     func.verify(() => {
 
       if (!func.existJob(job_name)) {
-        logError(job_name, "job not found")
+        logError("job", job_name, "not found")
         process.exit(1)
       }
 
@@ -511,6 +520,23 @@ job
 
   })
 
+job
+  .command('run <job>')
+  .description('Execute a job')
+  .action((job) => {
+    func.verify(() => {
+      if (!func.existJob(job)) {
+        logError("job", job, "not found")
+        process.exit(1)
+      }
+
+      job_run(job)
+        .then(() => { logSuccess("Job", job, "run successfully") })
+        .catch(err => { logError(err); process.exit(1) })
+        .finally(() => { setTimeout(() => { process.exit(0) }, 500) })
+    })
+
+  })
 
 job
   .command('copy <job1_name> <job2_name>')
