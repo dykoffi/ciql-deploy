@@ -1,6 +1,9 @@
 /* groovylint-disable-next-line CompileStatic */
 pipepline {
   agent any
+  environment {
+    
+  }
   stages {
       stage('install npm packages') {
         steps {

@@ -19,11 +19,19 @@
 
 <h1 style="color:#9fa8da;">Usage</h1>
 
-```js
-const Mailer = require('ciql-mailer')
-const agent = new Mailer()
+```bash
+cdep --help
 
-agent.connect()
+Usage: cdep [options] [command]
+
+Options:
+  -h, --help      display help for command
+
+Commands:
+  init            Initialize config files
+  job             Manage jobs configuration
+  server          Manage Servers configuration
+  help [command]  display help for command
 ```
 
 
