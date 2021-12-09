@@ -1,14 +1,17 @@
 /* groovylint-disable-next-line CompileStatic */
-pipepline {
-  agent any
-  environment {
-    NPM = credentials('npm_token')
-  }
-  stages {
-      stage('Send to NPM') {
-        steps {
-          sh 'npm publish --token $NPM'
+pipeline {
+    agent any
+    environment {
+        NPM = credentials('npm_token')
+    }
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+                sh 'touch "$NPM" > text.md'
+                archiveArtifacts artifacts: 'text.md', followSymlinks: false
+            }
         }
-      }
-  }
+    }
 }
