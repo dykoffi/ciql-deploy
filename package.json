@@ -1,5 +1,5 @@
 {
-  "name": "cdep",
+  "name": "ciql-deploy",
   "version": "1.0.0",
   "description": "tool to automate deployment",
   "main": "./bin/index.js",
