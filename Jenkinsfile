@@ -6,12 +6,10 @@ pipeline {
     }
 
     stages {
-        stage('Hello') {
-            steps {
-                echo 'Hello World'
-                sh 'touch "$NPM" > text.md'
-                archiveArtifacts artifacts: 'text.md', followSymlinks: false
-            }
+        stage('send to npm') {
+      steps {
+        sh 'npm ci publish --token $NPM'
+      }
         }
     }
 }
