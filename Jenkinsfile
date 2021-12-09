@@ -7,7 +7,7 @@ pipepline {
   stages {
       stage('Send to NPM') {
         steps {
-          sh script: 'npm publish --token $NPM', returnStatus: true
+          sh 'npm publish --token $NPM'
         }
       }
   }
