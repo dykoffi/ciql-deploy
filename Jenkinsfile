@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('send to npm') {
       steps {
+        sh 'npm login'
         sh 'npm publish --token $NPM'
       }
         }
