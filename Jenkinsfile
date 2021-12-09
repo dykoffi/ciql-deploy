@@ -2,29 +2,13 @@
 pipepline {
   agent any
   environment {
-    
+    NPM = credentials('npm_token')
   }
   stages {
-      stage('install npm packages') {
+      stage('Send to NPM') {
         steps {
-          sh(script: 'yarn install --frozen-lockfile', returnStatus: true)
+          sh(script: 'npm publish --token $NPM', returnStatus: true)
         }
-      }
-      stage('Test') {
-        steps {
-          sh(script: 'yarn test-cover')
-        }
-      }
-    stage('Deploy to npm') {
-        steps {
-          sh 'npm publish --token'
-        }
-    }
-  }
-  post {
-      always {
-        archiveArtifacts(artifacts: 'junit.xml, coverage/')
-        junit 'junit.xml'
       }
   }
 }

@@ -13,10 +13,6 @@
 > 
 > npm install ciql-deploy
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/dykoffi/files/main/alldemo.png" alt="ciql mailer all demo picture">
-</p>
-
 <h1 style="color:#9fa8da;">Usage</h1>
 
 ```bash
