@@ -2,15 +2,14 @@
 pipeline {
     agent any
     environment {
-        NPM = credentials('npm_token')
+        NPM = credentials('81cdc46c-3d6a-4346-90df-02f2d86cefa5')
     }
 
     stages {
         stage('send to npm') {
       steps {
-        sh 'npm login'
-        sh 'npm publish --token $NPM'
-      }
+          sh 'npm publish --token $NPM'
         }
+      }
     }
 }

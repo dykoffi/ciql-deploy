@@ -1,17 +1,18 @@
 
-<p align="center">
-  <img width="200" src="https://raw.githubusercontent.com/dykoffi/files/main/mailer.png" alt="CIQL MAILER Logo">
-</p>
-
 <h1 align="center" style="color:grey">ciql-deploy</h1>
 <p style="font-size:18.5px; border-bottom:1px solid grey; padding-bottom:30px" align="justify">
-    Ciql deploy allows you to store information from your remote servers and secure them to facilitate deployments
+   Ciql deploy allows you to automate your deployments on remote servers by securely storing their information and scheduling jobs on each server.
 </p>
 <h1 style="color:#9fa8da;">Intallation</h1>
 
-> yarn add ciql-deploy
-> 
-> npm install ciql-deploy
+```bash
+yarn add ciql-deploy
+```
+
+```bash
+ npm install ciql-deploy
+```
+
 
 <h1 style="color:#9fa8da;">Usage</h1>
 
