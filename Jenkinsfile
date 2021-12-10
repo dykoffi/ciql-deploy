@@ -1,6 +1,11 @@
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:16-alpine' 
+            args '-u root' 
+        }
+    }
     environment {
         NPM_TOKEN = credentials('npm_token')
     }
