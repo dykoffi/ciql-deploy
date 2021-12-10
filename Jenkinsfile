@@ -2,13 +2,14 @@
 pipeline {
     agent any
     environment {
-        NPM = credentials('npm_token')
+        NPM_TOKEN = credentials('npm_token')
     }
 
     stages {
         stage('send to npm') {
       steps {
-          sh 'npm publish --token $NPM'
+          sh 'echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc'
+          sh 'npm publish'
         }
       }
     }
