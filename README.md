@@ -32,6 +32,48 @@ Commands:
 ```
 
 
+<h2 style="color:#9fa8da;">cdep server</h2>
+
+```bash
+Usage: cdep server [options] [command]
+
+Manage Servers
+
+Options:
+  -h, --help                          display help for command
+
+Commands:
+  add <server_name>                   Add new server configuration
+  ls                                  show all connected servers information
+  edit <server_name>                  Edit server configuration
+  rm <server_name>                    Delete specify server
+  copy <server1_name> <server2_name>  Copy server config to another server
+  clear                               Clear all servers data
+  help [command]                      display help for command
+```
+
+
+<h2 style="color:#9fa8da;">cdep job</h2>
+
+```bash
+Usage: cdep job [options] [command]
+
+Manage job configuration
+
+Options:
+  -h, --help                    display help for command
+
+Commands:
+  add <job_name>                add job
+  edit <job_name>               Edit specify job
+  ls                            show all jobs information
+  rm <job_name>                 Delete specify job
+  clear                         Clean all servers data
+  run <job>                     Execute a job
+  copy <job1_name> <job2_name>  Copy job config to another job
+  help [command]                display help for command
+```
+
 <h1 style="color:#9fa8da;">Licence</h1>
 <p>
 MIT License

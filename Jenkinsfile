@@ -6,10 +6,9 @@ pipeline {
     }
 
     stages {
-        stage('send to npm') {
+        stage('publish to npm') {
       steps {
-          sh 'pwd'
-          sh 'npm publish --access plublic'
+          sh 'npm publish --token $NPM_TOKEN'
         }
       }
     }
