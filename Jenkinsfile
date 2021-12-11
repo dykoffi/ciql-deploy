@@ -6,9 +6,10 @@ pipeline {
     }
 
     stages {
-        stage('publish to npm') {
+        stage('send to npm') {
       steps {
-          sh 'npm publish --token $NPM_TOKEN'
+          sh 'echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc'
+          sh 'npm publish --access public'
         }
       }
     }
