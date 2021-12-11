@@ -1,6 +1,6 @@
 {
   "name": "ciql-deploy",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "tool to automate deployment",
   "main": "./bin/index.js",
   "bin": {

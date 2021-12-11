@@ -31,8 +31,12 @@ Commands:
   help [command]  display help for command
 ```
 
+<h3 id="server" style="color:#ff80ab;">
+<a href="#server"># cdep server</a></h3>
 
-<h2 style="color:#9fa8da;">cdep server</h2>
+### cdep server allows you to manage servers. The configurations are saved in secure files in order to preserve confidential information against possible attackers. 
+
+### For even more security, you can ignore the .cdep folder in your .gitigonre to avoid committing it to your public repository.
 
 ```bash
 Usage: cdep server [options] [command]
@@ -53,7 +57,10 @@ Commands:
 ```
 
 
-<h2 style="color:#9fa8da;">cdep job</h2>
+<h3 id="job" style="color:#ff80ab;">
+<a href="#job"># cdep job</a></h3>
+
+### cedp job allows you to schedule jobs to be run on pre-registered servers. It offers you several commands for managing and executing jobs.
 
 ```bash
 Usage: cdep job [options] [command]
