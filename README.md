@@ -3,14 +3,14 @@
 <p style="font-size:18.5px; border-bottom:1px solid grey; padding-bottom:30px" align="justify">
    Ciql deploy allows you to automate your deployments on remote servers by securely storing their information and scheduling jobs on each server.
 </p>
-<h1 style="color:#9fa8da;">Intallation</h1>
+<h1 style="color:#9fa8da;">Installation</h1>
 
 ```bash
-yarn add ciql-deploy
+yarn global add ciql-deploy
 ```
 
 ```bash
- npm install ciql-deploy
+ npm install -g ciql-deploy
 ```
 
 
@@ -66,7 +66,7 @@ Commands:
 <a href="#job"># cdep job</a></h3>
 
 <p style="font-size:18.5px; border-bottom:1px solid grey; padding-bottom:30px" align="justify">
-    cedp job allows you to schedule jobs to be run on pre-registered servers. It offers you several commands for managing and executing jobs.
+    cdep job allows you to schedule jobs to be run on pre-registered servers. It offers you several commands for managing and executing jobs.
 </p>
 
 ```bash
