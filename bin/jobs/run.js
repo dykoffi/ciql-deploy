@@ -30,10 +30,8 @@ function run(job) {
         password: pass,
         port: port
       }).then(async () => {
-        let ArttefactStats = fs.lstatSync(resolve(artefact))
-
         logInfo("run job", jobName)
-        logInfo(`prebuild '${prebuild}'`)
+        logInfo(`prebuild: '${prebuild}'`)
         exec(prebuild, { cwd: resolve(cwd()) }, async (err, stdout, stderr) => {
           if (err) {
             reject(err)
@@ -42,7 +40,7 @@ function run(job) {
           }
         })
         function execBuild(params) {
-          logInfo(`build '${build}'`)
+          logInfo(`build: '${build}'`)
           exec(build, { cwd: resolve(cwd()) }, async (err, stdout, stderr) => {
             if (err) {
               reject(err)
@@ -54,7 +52,7 @@ function run(job) {
 
 
         function execCmd() {
-          logInfo("execute on server :", serverCmd)
+          logInfo("execute on server", serverCmd)
           ssh.execCommand(serverCmd, { cwd: resolve(serverTargetPath), stream: 'stdout', options: { pty: true } })
             .then(function (result) {
               console.log(result.stdout);
@@ -68,6 +66,8 @@ function run(job) {
             })
         }
         function sendArtefact() {
+          let ArttefactStats = fs.lstatSync(resolve(artefact))
+
           logInfo("get artefact", artefact)
           logInfo("Send artefact to server", serverName)
 
