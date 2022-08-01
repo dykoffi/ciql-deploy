@@ -354,7 +354,7 @@ job
         ])
 
         let identifiant = crypto.randomBytes(32).toString('base64')
-        identifiant = "sv-" + identifiant
+        identifiant = "jb-" + identifiant
 
         let dataPath = join(cwd(), ".cdep", "data", ".jobs")
 
@@ -563,7 +563,7 @@ job
         let dataPath = join(cwd(), ".cdep", "data", ".jobs")
 
         let identifiant = crypto.randomBytes(32).toString('base64')
-        identifiant = "sv-" + identifiant
+        identifiant = "jb-" + identifiant
 
         let data = ciqlJSON
           .create(func.readCryptJson(dataPath))
