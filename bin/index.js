@@ -323,6 +323,7 @@ job
             type: "input",
             name: "postdeploy",
             message: "Post deploy",
+            multiline: true
           },
         ])
 
@@ -350,6 +351,7 @@ job
             type: "input",
             name: "cmd",
             message: "Cmd",
+            multiline: true
           }
         ])
 
@@ -427,6 +429,7 @@ job
             type: "input",
             name: "postdeploy",
             message: "Post deploy",
+            multiline: true,
             initial: job.postdeploy
           },
         ])
@@ -457,6 +460,7 @@ job
             type: "input",
             name: "cmd",
             message: "Cmd",
+            multiline: true,
             initial: job.serverCmd
           }
         ])

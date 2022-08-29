@@ -5,7 +5,7 @@
   "main": "./bin/index.js",
   "private": false,
   "bin": {
-    "cdep": "bin/index.js"
+    "autocd": "bin/index.js"
   },
   "scripts": {
     "test": "jest",
