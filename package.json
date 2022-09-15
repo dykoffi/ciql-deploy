@@ -1,6 +1,6 @@
 {
-  "name": "ciql-deploy",
-  "version": "1.0.10",
+  "name": "autocd",
+  "version": "1.0.11",
   "description": "tool to automate deployment",
   "main": "./bin/index.js",
   "private": false,

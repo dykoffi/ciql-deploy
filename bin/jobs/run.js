@@ -77,6 +77,11 @@ function run(job) {
               {
                 recursive: true,
                 concurrency: 10,
+                validate: function (itemPath) {
+                  const baseName = basename(itemPath)
+                  return baseName !== 'node_modules' // do not allow node_modules
+                },
+
               })
               .then(() => { execCmd() })
               .catch(error => {
